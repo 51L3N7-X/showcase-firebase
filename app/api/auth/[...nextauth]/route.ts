@@ -2,7 +2,8 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import jwt from "jsonwebtoken";
 
-const SECRET_KEY = process.env.SECRET_AUTH || "THISISAREPLACERJSONWEBTOKENINCASENOTFOUNDIN.ENV"
+const SECRET_KEY =
+  process.env.SECRET_AUTH || "THISISAREPLACERJSONWEBTOKENINCASENOTFOUNDIN.ENV";
 
 export const handler = NextAuth({
   providers: [
@@ -19,7 +20,11 @@ export const handler = NextAuth({
           credentials.username === "admin" &&
           credentials.password === "password"
         ) {
-          return { id: "1", name: "Admin User" };
+          const user = { id: "1", name: "Admin User" };
+          const token = jwt.sign(user, SECRET_KEY, {
+            expiresIn: "1h", // Modify it if you wanted.
+          });
+          return { ...user, accessToken: token };
         }
         return null;
       },
@@ -29,16 +34,17 @@ export const handler = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user, account }) {
-      console.log(token, account);
-      if (user) token.id = user.id;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.accessToken = user.accessToken;
+      }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        // @ts-expect-error TODO: edit session type to contain id too.
-        session.user.id = token.id;
-        session.accessToken = token.accessToken;
+        session.user.id = token.id as string;
+        session.accessToken = token.accessToken as string | undefined;
       }
       return session;
     },
