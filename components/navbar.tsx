@@ -61,6 +61,9 @@ export function NavBar() {
             {item.name}
           </Link>
         ))}
+        <Link href="/login">
+          <Button size="default">Log In</Button>
+        </Link>
         <ModeToggle></ModeToggle>
       </nav>
     </header>
