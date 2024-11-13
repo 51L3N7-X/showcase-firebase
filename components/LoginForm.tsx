@@ -51,8 +51,11 @@ export function LoginForm() {
       username: data.username,
       password: data.password,
     });
+    console.log(result);
     if (result?.ok) {
       router.push("/dashboard");
+    } else {
+      alert("login failed");
     }
     // toast({
     //   title: "You submitted the following values:",

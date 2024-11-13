@@ -2,10 +2,10 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import jwt from "jsonwebtoken";
 
-const SECRET_KEY =
-  process.env.SECRET_AUTH || "THISISAREPLACERJSONWEBTOKENINCASENOTFOUNDIN.ENV";
+const SECRET_KEY = process.env.NEXTAUTH_SECRET || "REPLACE.THIS";
 
 export const handler = NextAuth({
+  secret: SECRET_KEY,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -14,6 +14,7 @@ export const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
+        console.log(credentials);
         if (!credentials) return null;
         // Replace this with actual backend authentication logic
         if (

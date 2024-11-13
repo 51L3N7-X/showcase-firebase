@@ -1,4 +1,3 @@
-import NextAuth from "next-auth";
 import type { JWT as NextAuthJWT } from "next-auth";
 
 declare module "next-auth" {
