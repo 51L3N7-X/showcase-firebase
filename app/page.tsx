@@ -24,7 +24,7 @@ export default function Home() {
   const {
     data: burgers,
     isLoading,
-    error,
+    // error,
   } = useQuery({ queryKey: ["burgers"], queryFn: fetchBurgers });
 
   if (isLoading) return <p>Loading...</p>;
@@ -39,9 +39,8 @@ export default function Home() {
         <h1 className="text-3xl font-bold text-center mb-8">Burgers</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {burgers!.map((burger, index) => (
-            <Link href={`/burger/${burger.id}`}>
+            <Link href={`/burger/${burger.id}`} key={index}>
               <CardComponent
-                key={index}
                 name={burger.name}
                 imageUrl={burger.imageURL}
               />

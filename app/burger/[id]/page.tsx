@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
 
-export default function page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   async function fetchBurger(): Promise<Burger> {
     const response = await fetch(
       `${window.location.origin}/api/burgers/${params.id}`,
@@ -25,7 +25,7 @@ export default function page({ params }: { params: { id: string } }) {
   const {
     data: burger,
     isLoading,
-    error,
+    // error,
   } = useQuery({ queryKey: ["burger"], queryFn: fetchBurger });
 
   if (isLoading) return <p>Loading...</p>;

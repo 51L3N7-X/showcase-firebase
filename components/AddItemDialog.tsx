@@ -25,9 +25,10 @@ import { Burger } from "@/types/Burger";
 import { genUploader } from "uploadthing/client";
 import Image from "next/image";
 import { UploadButton } from "@/utils/uploadthing";
+import { useSession } from "next-auth/react";
 
 // @ts-expect-error TODO
-export const { uploadFiles } = genUploader<any>();
+export const { uploadFiles } = genUploader<unknown>();
 
 export function AddOrEditItem({
   open,
@@ -50,6 +51,8 @@ export function AddOrEditItem({
   const { handleSubmit, reset } = form;
   const queryClient = useQueryClient();
 
+  const { data: session } = useSession();
+
   // Reset form when dialog opens/closes or burgerData changes
   useEffect(() => {
     if (burgerData) {
@@ -64,16 +67,23 @@ export function AddOrEditItem({
   // Mutation function (either POST or PUT based on burgerData presence)
   const mutation = useMutation({
     mutationFn: async (data: Burger) => {
-      const response = await fetch(
-        `/api/burgers${burgerData?.id ? `/${burgerData.id}` : ""}`,
-        {
-          method: burgerData?.id ? "PUT" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        }
-      );
-      const burger = await response.json();
-      return burger;
+      try {
+        const response = await fetch(
+          `/api/burgers${burgerData?.id ? `/${burgerData.id}` : ""}`,
+          {
+            method: burgerData?.id ? "PUT" : "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
+            body: JSON.stringify(data),
+          }
+        );
+        const burger = await response.json();
+        return burger;
+      } catch (error) {
+        console.error(error);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["burgers"] });

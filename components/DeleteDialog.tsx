@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 interface DeleteDialogProps {
   open: boolean;
@@ -17,14 +18,22 @@ interface DeleteDialogProps {
 }
 
 export function DeleteDialog({ open, setOpen, burgerId }: DeleteDialogProps) {
+  const { data: session } = useSession();
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const response = await fetch(`/api/burgers/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Failed to delete burger");
+      try {
+        const response = await fetch(`/api/burgers/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        });
+        if (!response.ok) throw new Error("Failed to delete burger");
+      } catch (e) {
+        console.error(e);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["burgers"] });
