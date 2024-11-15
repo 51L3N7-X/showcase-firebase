@@ -6,18 +6,25 @@ import jwt from "jsonwebtoken";
 const SECRET_KEY = process.env.NEXTAUTH_SECRET as string;
 
 export async function GET() {
-  await db.read();
-  return NextResponse.json(db.data?.burgers || [], { status: 200 });
+  try {
+    await db.read();
+    return NextResponse.json(db.data?.burgers || [], { status: 200 });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
-  const token = request.headers.get("authorization")?.split(" ")[1];
-
-  if (!token) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    const token = request.headers.get("authorization")?.split(" ")[1];
+
+    if (!token) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     jwt.verify(token, SECRET_KEY);
     const newBurger: Omit<Burger, "id"> = await request.json();
     await db.read();

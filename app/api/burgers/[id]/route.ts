@@ -8,28 +8,35 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const id = parseInt(params.id, 10);
-  await db.read();
-  const burger = db.data?.burgers.find((b) => b.id === id);
+  try {
+    const id = parseInt(params.id, 10);
+    await db.read();
+    const burger = db.data?.burgers.find((b) => b.id === id);
 
-  if (!burger) {
-    return NextResponse.json({ error: "Burger not found" }, { status: 404 });
+    if (!burger) {
+      return NextResponse.json({ error: "Burger not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(burger, { status: 200 });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json(burger, { status: 200 });
 }
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const token = request.headers.get("authorization")?.split(" ")[1];
-
-  if (!token) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    const token = request.headers.get("authorization")?.split(" ")[1];
+
+    if (!token) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     jwt.verify(token, SECRET_KEY);
     const id = parseInt(params.id, 10);
     const updatedData = await request.json();
@@ -53,13 +60,13 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const token = request.headers.get("authorization")?.split(" ")[1];
-
-  if (!token) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    const token = request.headers.get("authorization")?.split(" ")[1];
+
+    if (!token) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    
     jwt.verify(token, SECRET_KEY);
     const id = parseInt(params.id, 10);
     await db.read();
