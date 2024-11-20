@@ -16,6 +16,7 @@ import { Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 import { AddOrEditItem } from "@/components/AddItemDialog";
 import { DeleteDialog } from "@/components/DeleteDialog";
+import { Separator } from "@/components/ui/separator";
 
 export default function DashboardPage() {
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -124,6 +125,11 @@ export default function DashboardPage() {
         setOpen={setIsDeleteOpen}
         burgerId={burgerIdToDelete}
       />
+      <Separator className="mb-2"></Separator>
+      <h1 className="text-2xl font-semibold my-4">Ads Images</h1>
+      <Button className="mb-4" onClick={() => {}}>
+        Add Image
+      </Button>
     </div>
   );
 }
