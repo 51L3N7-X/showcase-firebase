@@ -1,0 +1,34 @@
+{
+  "burgers": [
+    {
+      "id": 10,
+      "name": "Classic Cheeseburger",
+      "description": "A juicy beef patty topped with melted cheddar cheese, fresh lettuce, tomato, and pickles, all inside a toasted sesame bun.",
+      "imageURL": "https://utfs.io/f/2knrWzaLMpWmi6XH68tIbJ91ULiRd8sFePkO2fjgCuM6XNlK"
+    },
+    {
+      "id": 2,
+      "name": "Bacon BBQ Burger",
+      "description": "A savory burger with crispy bacon, smoky BBQ sauce, cheddar cheese, and crispy onion rings on a toasted brioche bun.",
+      "imageURL": "https://utfs.io/f/2knrWzaLMpWmtDb6mFrW8brJLySx9Fdcn3YTV0fAs1oazGCR"
+    },
+    {
+      "id": 3,
+      "name": "Mushroom Swiss Burger",
+      "description": "A flavorful combination of sautéed mushrooms, Swiss cheese, and garlic aioli on a toasted whole-grain bun.",
+      "imageURL": "https://utfs.io/f/2knrWzaLMpWmNF7W70mbd3fGImPi69DxrW14aU7hzvSCVule"
+    },
+    {
+      "id": 4,
+      "name": "Spicy Jalapeno Burger",
+      "description": "A spicy delight featuring pepper jack cheese, fresh jalapenos, and chipotle mayo on a toasted pretzel bun.",
+      "imageURL": "https://utfs.io/f/2knrWzaLMpWmgKoF1snuyE2mbHgXlpqowOPSTdkIvrD1UQG7"
+    },
+    {
+      "id": 5,
+      "name": "Vegan Delight Burger",
+      "description": "A plant-based patty with vegan cheese, avocado, lettuce, tomato, and vegan mayo on a gluten-free bun.",
+      "imageURL": "https://utfs.io/f/2knrWzaLMpWmqqcQWnvx0rYKS5E4WhBPfDsvkT63zdVm2wby"
+    }
+  ]
+}
