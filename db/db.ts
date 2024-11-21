@@ -7,7 +7,7 @@ interface Database {
   burgers: Burger[];
 }
 
-const filePath = path.resolve(process.cwd(), "data", "burgers.json");
+const filePath = path.resolve(process.cwd(), "tmp", "burgers.json");
 const adapter = new JSONFile<Database>(filePath);
 const db = new Low<Database>(adapter, { burgers: [] });
 

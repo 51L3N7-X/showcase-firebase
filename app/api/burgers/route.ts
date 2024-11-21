@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
     await db.write();
 
     return NextResponse.json(burger, { status: 201 });
-  } catch {
+  } catch (e) {
+    console.error(e);
     return NextResponse.json({ message: "Invalid Token" }, { status: 403 });
   }
 }
