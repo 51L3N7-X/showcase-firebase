@@ -1,4 +1,5 @@
-import db from "@/db/db";
+// import db from "@/db/db";
+import { db } from "@/lib/firebaseAdmin";
 import { Burger } from "@/types/Burger";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
@@ -7,8 +8,9 @@ const SECRET_KEY = process.env.NEXTAUTH_SECRET as string;
 
 export async function GET() {
   try {
-    await db.read();
-    return NextResponse.json(db.data?.burgers || [], { status: 200 });
+    const snapshot = await db.collection("burgers").get();
+    const burgers = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return NextResponse.json(burgers || [], { status: 200 });
   } catch (e) {
     console.error(e);
     return NextResponse.json(
@@ -27,13 +29,9 @@ export async function POST(request: NextRequest) {
     }
     jwt.verify(token, SECRET_KEY);
     const newBurger: Omit<Burger, "id"> = await request.json();
-    await db.read();
-    const id = Date.now();
-    const burger: Burger = { id, ...newBurger };
-    db.data?.burgers.push(burger);
-    await db.write();
-
-    return NextResponse.json(burger, { status: 201 });
+    const burgerRef = await db.collection("burgers").add(newBurger);
+    const burger = (await burgerRef.get()).data();
+    return NextResponse.json({...burger , id: burgerRef.id}, { status: 201 });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ message: "Invalid Token" }, { status: 403 });
